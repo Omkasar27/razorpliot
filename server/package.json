@@ -1,0 +1,22 @@
+{
+  "name": "razorpilot-server",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "seed": "node src/seed/seed.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "groq-sdk": "^0.7.0",
+    "razorpay": "^2.9.4",
+    "firebase-admin": "^12.3.1",
+    "morgan": "^1.10.0"
+  }
+}

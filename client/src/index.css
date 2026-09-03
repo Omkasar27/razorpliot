@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  /* Fintech-SaaS palette: near-black ink, cool neutrals, a single Razorpay-adjacent blue accent. */
+  --color-ink: #0B0F17;
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #F6F7F9;
+  --color-border: #E4E7EC;
+  --color-accent: #3B5BFD;
+  --color-accent-dim: #EEF1FF;
+  --color-success: #12805C;
+  --color-warning: #B45309;
+  --color-danger: #C0362C;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+body {
+  background-color: var(--color-surface-muted);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
