@@ -47,11 +47,11 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <KpiCard label="AI-generated revenue" value={`₹${data.totalRevenue}`} />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <KpiCard label="AI-generated revenue" value={data.totalRevenue} prefix="₹" />
         <KpiCard label="AI-assisted orders" value={data.aiAssistedOrders} />
-        <KpiCard label="Average order value" value={`₹${data.averageOrderValue}`} />
-        <KpiCard label="Payment success rate" value={`${data.paymentSuccessRate}%`} />
+        <KpiCard label="Average order value" value={data.averageOrderValue} prefix="₹" decimals={1} />
+        <KpiCard label="Payment success rate" value={data.paymentSuccessRate} suffix="%" decimals={1} />
       </div>
 
       <div className="border border-[var(--color-border)] rounded-lg p-4 bg-[var(--color-surface)]">

@@ -1,26 +1,19 @@
-import { X, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../hooks/useCart.jsx';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet.jsx';
+import { Button } from '../ui/button.jsx';
 
 export default function CartDrawer() {
   const { cart, total, drawerOpen, setDrawerOpen, removeItem, loading } = useCart();
   const navigate = useNavigate();
 
-  if (!drawerOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
-      <div className="absolute inset-0 bg-black/30" onClick={() => setDrawerOpen(false)} />
-      <div className="relative w-full max-w-sm bg-[var(--color-surface)] h-full shadow-xl flex flex-col">
-        <div className="flex items-center justify-between px-4 h-14 border-b border-[var(--color-border)]">
-          <h2 className="text-sm font-semibold">Your cart</h2>
-          <button
-            onClick={() => setDrawerOpen(false)}
-            className="text-[var(--color-ink)]/50 hover:text-[var(--color-ink)]"
-          >
-            <X size={18} />
-          </button>
-        </div>
+    <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Your cart</SheetTitle>
+        </SheetHeader>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {loading && <div className="text-sm text-[var(--color-ink)]/50">Loading…</div>}
@@ -54,20 +47,20 @@ export default function CartDrawer() {
         <div className="border-t border-[var(--color-border)] p-4">
           <div className="flex items-center justify-between text-sm font-medium mb-3">
             <span>Total</span>
-            <span>₹{total}</span>
+            <span className="tabular-nums">₹{total}</span>
           </div>
-          <button
+          <Button
             disabled={cart.items.length === 0}
             onClick={() => {
               setDrawerOpen(false);
               navigate('/checkout');
             }}
-            className="w-full bg-[var(--color-accent)] text-white text-sm font-medium py-2 rounded-md disabled:opacity-50 hover:opacity-90"
+            className="w-full"
           >
             Proceed to checkout
-          </button>
+          </Button>
         </div>
-      </div>
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 }

@@ -1,7 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Plus, Pencil, Power } from 'lucide-react';
+import { toast } from 'sonner';
 import { api } from '../../lib/api.js';
 import ProductForm from '../../components/merchant/ProductForm.jsx';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../components/ui/dialog.jsx';
+import { Button } from '../../components/ui/button.jsx';
 
 const MERCHANT_ID = import.meta.env.VITE_DEMO_MERCHANT_ID;
 
@@ -31,13 +34,13 @@ export default function CatalogPage() {
 
   async function handleCreate(data) {
     setBusy(true);
-    setError('');
     try {
       await api.post('/merchant/products', { ...data, merchantId: MERCHANT_ID });
       setFormMode(null);
+      toast.success('Product added');
       await load();
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setBusy(false);
     }
@@ -45,13 +48,13 @@ export default function CatalogPage() {
 
   async function handleUpdate(id, data) {
     setBusy(true);
-    setError('');
     try {
       await api.put(`/merchant/products/${id}`, data);
       setFormMode(null);
+      toast.success('Product updated');
       await load();
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setBusy(false);
     }
@@ -59,22 +62,24 @@ export default function CatalogPage() {
 
   async function toggleActive(product) {
     setBusy(true);
-    setError('');
     try {
       if (product.active) {
         await api.del(`/merchant/products/${product._id}`);
+        toast.success(`${product.name} deactivated`);
       } else {
         await api.put(`/merchant/products/${product._id}`, { active: true });
+        toast.success(`${product.name} activated`);
       }
       await load();
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setBusy(false);
     }
   }
 
   const isEditing = formMode && formMode !== 'create';
+  const dialogOpen = Boolean(formMode);
 
   if (!MERCHANT_ID) {
     return (
@@ -88,15 +93,10 @@ export default function CatalogPage() {
     <div>
       <div className="flex items-center justify-between mb-1">
         <h1 className="text-xl font-semibold">Catalog</h1>
-        {!formMode && (
-          <button
-            onClick={() => setFormMode('create')}
-            className="flex items-center gap-1 text-sm bg-[var(--color-accent)] text-white px-3 py-1.5 rounded-md hover:opacity-90"
-          >
-            <Plus size={14} />
-            Add product
-          </button>
-        )}
+        <Button size="sm" onClick={() => setFormMode('create')}>
+          <Plus size={14} />
+          Add product
+        </Button>
       </div>
       <p className="text-sm text-[var(--color-ink)]/60 mb-6">
         Products available to the AI agent for search and recommendations.
@@ -104,25 +104,21 @@ export default function CatalogPage() {
 
       {error && <div className="text-sm text-[var(--color-danger)] mb-3">{error}</div>}
 
-      {formMode === 'create' && (
-        <div className="mb-6">
-          <ProductForm onSubmit={handleCreate} onCancel={() => setFormMode(null)} busy={busy} />
-        </div>
-      )}
-
-      {isEditing && (
-        <div className="mb-6">
+      <Dialog open={dialogOpen} onOpenChange={(open) => !open && setFormMode(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{isEditing ? 'Edit product' : 'Add product'}</DialogTitle>
+          </DialogHeader>
           <ProductForm
-            initial={formMode}
-            onSubmit={(data) => handleUpdate(formMode._id, data)}
+            initial={isEditing ? formMode : undefined}
+            onSubmit={isEditing ? (data) => handleUpdate(formMode._id, data) : handleCreate}
             onCancel={() => setFormMode(null)}
             busy={busy}
           />
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
 
       {loading && <div className="text-sm text-[var(--color-ink)]/50">Loading…</div>}
-
       {!loading && products.length === 0 && (
         <div className="text-sm text-[var(--color-ink)]/50">No products yet.</div>
       )}
@@ -134,19 +130,22 @@ export default function CatalogPage() {
               <tr>
                 <th className="px-4 py-2 font-medium">Name</th>
                 <th className="px-4 py-2 font-medium">Category</th>
-                <th className="px-4 py-2 font-medium">Price</th>
-                <th className="px-4 py-2 font-medium">Inventory</th>
+                <th className="px-4 py-2 font-medium text-right">Price</th>
+                <th className="px-4 py-2 font-medium text-right">Inventory</th>
                 <th className="px-4 py-2 font-medium">Status</th>
                 <th className="px-4 py-2 font-medium"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--color-border)] bg-[var(--color-surface)]">
               {products.map((p) => (
-                <tr key={p._id} className={!p.active ? 'opacity-50' : ''}>
+                <tr
+                  key={p._id}
+                  className={`hover:bg-[var(--color-surface-muted)]/60 ${!p.active ? 'opacity-50' : ''}`}
+                >
                   <td className="px-4 py-3 font-medium">{p.name}</td>
                   <td className="px-4 py-3 text-[var(--color-ink)]/70">{p.category}</td>
-                  <td className="px-4 py-3">₹{p.price}</td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 text-right tabular-nums">₹{p.price}</td>
+                  <td className="px-4 py-3 text-right tabular-nums">
                     <span className={p.inventory < 3 ? 'text-[var(--color-danger)]' : ''}>{p.inventory}</span>
                   </td>
                   <td className="px-4 py-3">

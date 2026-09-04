@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { api } from '../../lib/api.js';
 
 const MERCHANT_ID = import.meta.env.VITE_DEMO_MERCHANT_ID;
@@ -8,7 +9,6 @@ export default function SafetyRulesPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (!MERCHANT_ID) return;
@@ -21,7 +21,6 @@ export default function SafetyRulesPage() {
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
-    setSaved(false);
   }
 
   async function handleSave(e) {
@@ -37,8 +36,9 @@ export default function SafetyRulesPage() {
         maxRetryAttempts: Number(form.maxRetryAttempts),
       });
       setForm(res.rule);
-      setSaved(true);
+      toast.success('Safety rules saved');
     } catch (err) {
+      toast.error(err.message);
       setError(err.message);
     } finally {
       setSaving(false);
@@ -118,9 +118,8 @@ export default function SafetyRulesPage() {
             className={inputClass}
           />
         </div>
-
+        
         {error && <div className="text-sm text-[var(--color-danger)]">{error}</div>}
-        {saved && <div className="text-sm text-[var(--color-success)]">Saved.</div>}
 
         <button
           type="submit"

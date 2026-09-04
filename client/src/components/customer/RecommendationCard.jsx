@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { api } from '../../lib/api.js';
 import { useCart } from '../../hooks/useCart.jsx';
+
+const MERCHANT_ID = import.meta.env.VITE_DEMO_MERCHANT_ID;
 
 export default function RecommendationCard({ recommendation }) {
   const { addItem } = useCart();
@@ -10,13 +13,17 @@ export default function RecommendationCard({ recommendation }) {
   async function decide(accepted) {
     setBusy(true);
     try {
-      await api.post(`/recommendations/${recommendation.recommendationId}/decision`, { accepted });
+      await api.post(`/recommendations/${recommendation.recommendationId}/decision`, {
+        accepted,
+        merchantId: MERCHANT_ID,
+      });
       if (accepted) {
         await addItem(recommendation.recommendedProduct._id, { addedVia: recommendation.type });
+        toast.success(`${recommendation.recommendedProduct.name} added to cart`);
       }
       setStatus(accepted);
-    } catch {
-      // Non-critical UI action — fail silently rather than blocking the shopping flow.
+    } catch (err) {
+      toast.error(err.message || 'Something went wrong.');
     } finally {
       setBusy(false);
     }

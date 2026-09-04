@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { checkHealth } from '../lib/api.js';
+import { useHeroAnimation, SplitWords } from '../components/landing/heroAnimation.jsx';
 
 const PIPELINE = [
   'Customer describes what they need',
@@ -54,6 +55,7 @@ const CAPABILITIES = [
 
 export default function LandingPage() {
   const [health, setHealth] = useState({ state: 'checking' });
+  const { headlineRef, pipelineRef } = useHeroAnimation();
 
   useEffect(() => {
     checkHealth()
@@ -79,8 +81,11 @@ export default function LandingPage() {
       {/* Hero */}
       <section className="max-w-5xl mx-auto px-6 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
         <div>
-          <h1 className="text-4xl md:text-[2.75rem] leading-[1.15] font-semibold tracking-tight mb-5">
-            An AI agent that sells for your store — inside limits you control.
+            <h1
+            ref={headlineRef}
+            className="text-4xl md:text-[2.75rem] leading-[1.15] font-semibold tracking-tight mb-5"
+          >
+            <SplitWords text="An AI agent that sells for your store — inside limits you control." />
           </h1>
           <p className="text-base text-[var(--color-ink)]/60 mb-8 max-w-md">
             RazorPilot talks to your customers, searches your catalog, suggests the right
@@ -105,9 +110,9 @@ export default function LandingPage() {
 
         <div className="border border-[var(--color-border)] rounded-lg bg-[var(--color-surface)] p-5">
           <div className="text-xs text-[var(--color-ink)]/50 mb-4">How one order happens</div>
-          <ol className="relative border-l border-[var(--color-border)] pl-4 space-y-3.5">
+                    <ol ref={pipelineRef} className="relative border-l border-[var(--color-border)] pl-4 space-y-3.5">
             {PIPELINE.map((step, i) => (
-              <li key={i} className="relative">
+              <li key={i} className="pipeline-step relative opacity-0">
                 <div className="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-[var(--color-accent)]" />
                 <div className="text-sm text-[var(--color-ink)]/80">{step}</div>
               </li>

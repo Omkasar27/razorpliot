@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send } from 'lucide-react';
+import { Send, Sparkles } from 'lucide-react';
 
 export default function ChatPanel({ messages, onSend, sending }) {
   const [text, setText] = useState('');
@@ -25,7 +25,12 @@ export default function ChatPanel({ messages, onSend, sending }) {
           </div>
         )}
         {messages.map((m, i) => (
-          <div key={i} className={`flex ${m.role === 'customer' ? 'justify-end' : 'justify-start'}`}>
+          <div key={i} className={`message-in flex gap-2 ${m.role === 'customer' ? 'justify-end' : 'justify-start'}`}>
+            {m.role === 'assistant' && (
+              <div className="w-6 h-6 rounded-full bg-[var(--color-accent-dim)] text-[var(--color-accent)] flex items-center justify-center shrink-0 mt-0.5">
+                <Sparkles size={12} />
+              </div>
+            )}
             <div
               className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${
                 m.role === 'customer'
@@ -38,9 +43,14 @@ export default function ChatPanel({ messages, onSend, sending }) {
           </div>
         ))}
         {sending && (
-          <div className="flex justify-start">
-            <div className="bg-[var(--color-surface-muted)] rounded-lg px-3 py-2 text-sm text-[var(--color-ink)]/50">
-              Thinking…
+          <div className="message-in flex gap-2 justify-start">
+            <div className="w-6 h-6 rounded-full bg-[var(--color-accent-dim)] text-[var(--color-accent)] flex items-center justify-center shrink-0 mt-0.5">
+              <Sparkles size={12} />
+            </div>
+            <div className="bg-[var(--color-surface-muted)] rounded-lg px-3 py-2.5 flex items-center gap-1">
+              <span className="typing-dot w-1.5 h-1.5 rounded-full bg-[var(--color-ink)]/40" style={{ animationDelay: '0ms' }} />
+              <span className="typing-dot w-1.5 h-1.5 rounded-full bg-[var(--color-ink)]/40" style={{ animationDelay: '150ms' }} />
+              <span className="typing-dot w-1.5 h-1.5 rounded-full bg-[var(--color-ink)]/40" style={{ animationDelay: '300ms' }} />
             </div>
           </div>
         )}
