@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
+import { Receipt } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth.jsx';
 import { api } from '../../lib/api.js';
 import StatusBadge from '../../components/merchant/StatusBadge.jsx';
+import { PageHeader } from '../../components/ui/page-header.jsx';
+import { EmptyState } from '../../components/ui/empty-state.jsx';
+
+const MERCHANT_ID = import.meta.env.VITE_DEMO_MERCHANT_ID;
 
 export default function OrdersPage() {
-
-  const MERCHANT_ID = import.meta.env.VITE_DEMO_MERCHANT_ID;
   const { appUser } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-    useEffect(() => {
+  useEffect(() => {
     if (!MERCHANT_ID) return;
     setLoading(true);
     api
@@ -23,36 +26,39 @@ export default function OrdersPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-1">Orders</h1>
-      <p className="text-sm text-[var(--color-ink)]/60 mb-6">All customer orders, most recent first.</p>
+      <PageHeader title="Orders" description="All customer orders, most recent first." />
 
       {loading && <div className="text-sm text-[var(--color-ink)]/50">Loading…</div>}
       {error && <div className="text-sm text-[var(--color-danger)]">{error}</div>}
 
       {!loading && !error && orders.length === 0 && (
-        <div className="text-sm text-[var(--color-ink)]/50">No orders yet.</div>
+        <EmptyState
+          icon={Receipt}
+          title="No orders yet"
+          description="Orders placed by customers through the shopping experience will show up here."
+        />
       )}
 
       {!loading && orders.length > 0 && (
-        <div className="border border-[var(--color-border)] rounded-lg overflow-hidden">
+        <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface)] shadow-[var(--shadow-card)] overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-[var(--color-surface-muted)] text-left text-xs text-[var(--color-ink)]/50">
               <tr>
-                <th className="px-4 py-2 font-medium">Date</th>
-                <th className="px-4 py-2 font-medium">Items</th>
-                <th className="px-4 py-2 font-medium">Amount</th>
-                <th className="px-4 py-2 font-medium">Status</th>
-                <th className="px-4 py-2 font-medium">Approval</th>
+                <th className="px-4 py-2.5 font-medium">Date</th>
+                <th className="px-4 py-2.5 font-medium">Items</th>
+                <th className="px-4 py-2.5 font-medium text-right">Amount</th>
+                <th className="px-4 py-2.5 font-medium">Status</th>
+                <th className="px-4 py-2.5 font-medium">Approval</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--color-border)] bg-[var(--color-surface)]">
+            <tbody className="divide-y divide-[var(--color-border)]/70">
               {orders.map((o) => (
-                <tr key={o._id}>
+                <tr key={o._id} className="hover:bg-[var(--color-surface-muted)]/70 transition-colors">
                   <td className="px-4 py-3 text-[var(--color-ink)]/70 whitespace-nowrap">
                     {new Date(o.createdAt).toLocaleString()}
                   </td>
                   <td className="px-4 py-3">{o.items.map((i) => i.name).join(', ')}</td>
-                  <td className="px-4 py-3 font-medium whitespace-nowrap">₹{o.amount}</td>
+                  <td className="px-4 py-3 font-medium whitespace-nowrap text-right tabular-nums">₹{o.amount}</td>
                   <td className="px-4 py-3">
                     <StatusBadge status={o.status} />
                   </td>

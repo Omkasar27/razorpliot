@@ -5,7 +5,7 @@ import { useCart } from '../../hooks/useCart.jsx';
 
 export default function ProductCard({ product }) {
   const { addItem } = useCart();
-  const [status, setStatus] = useState('idle'); // idle | adding | added
+  const [status, setStatus] = useState('idle');
   const [imageFailed, setImageFailed] = useState(false);
 
   const outOfStock = product.inStock === false;
@@ -25,7 +25,7 @@ export default function ProductCard({ product }) {
   }
 
   return (
-    <div className="border border-[var(--color-border)] rounded-lg overflow-hidden bg-[var(--color-surface)] hover:shadow-sm transition-shadow">
+    <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface)] overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
       <div className="aspect-[4/3] bg-[var(--color-surface-muted)] flex items-center justify-center overflow-hidden">
         {showImage ? (
           <img
@@ -39,7 +39,7 @@ export default function ProductCard({ product }) {
         )}
       </div>
 
-      <div className="p-3">
+      <div className="p-3.5">
         <div className="flex items-start justify-between gap-2">
           <div>
             <div className="text-sm font-medium">{product.name}</div>

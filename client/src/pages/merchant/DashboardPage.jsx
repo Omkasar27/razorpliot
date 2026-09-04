@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { api } from '../../lib/api.js';
 import KpiCard from '../../components/merchant/KpiCard.jsx';
+import { PageHeader } from '../../components/ui/page-header.jsx';
 
 const MERCHANT_ID = import.meta.env.VITE_DEMO_MERCHANT_ID;
 
@@ -34,31 +35,31 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-1">Overview</h1>
-      <p className="text-sm text-[var(--color-ink)]/60 mb-6">
-        AI-generated revenue and growth metrics, computed live from real orders.
-      </p>
+      <PageHeader
+        title="Overview"
+        description="AI-generated revenue and growth metrics, computed live from real orders."
+      />
 
       {lowSample && (
-        <div className="text-xs text-[var(--color-warning)] bg-[var(--color-warning)]/10 rounded-md px-3 py-2 mb-4">
+        <div className="text-xs text-[var(--color-warning)] bg-[var(--color-warning)]/10 rounded-lg px-3.5 py-2.5 mb-5">
           Small sample size ({data.sampleSize.paidOrders} paid order
           {data.sampleSize.paidOrders === 1 ? '' : 's'}) — demo/test data, treat percentages as
           illustrative.
         </div>
       )}
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <KpiCard label="AI-generated revenue" value={data.totalRevenue} prefix="₹" />
         <KpiCard label="AI-assisted orders" value={data.aiAssistedOrders} />
         <KpiCard label="Average order value" value={data.averageOrderValue} prefix="₹" decimals={1} />
         <KpiCard label="Payment success rate" value={data.paymentSuccessRate} suffix="%" decimals={1} />
       </div>
 
-      <div className="border border-[var(--color-border)] rounded-lg p-4 bg-[var(--color-surface)]">
-        <div className="text-sm font-medium mb-3">Conversion rates</div>
+      <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface)] p-5 shadow-[var(--shadow-card)]">
+        <div className="text-sm font-medium mb-4">Conversion rates</div>
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={conversionData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#E4E7EC" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#EDEBE7" />
             <XAxis dataKey="name" tick={{ fontSize: 12 }} />
             <YAxis tick={{ fontSize: 12 }} unit="%" />
             <Tooltip formatter={(v) => `${v}%`} />

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { api } from '../../lib/api.js';
+import { PageHeader } from '../../components/ui/page-header.jsx';
+import { Button } from '../../components/ui/button.jsx';
 
 const MERCHANT_ID = import.meta.env.VITE_DEMO_MERCHANT_ID;
 
@@ -46,7 +48,7 @@ export default function SafetyRulesPage() {
   }
 
   const inputClass =
-    'border border-[var(--color-border)] rounded-md px-3 py-2 text-sm outline-none focus:border-[var(--color-accent)] w-full';
+    'border border-[var(--color-border)] rounded-md px-3 py-2 text-sm outline-none focus:border-[var(--color-accent)] w-full bg-[var(--color-surface)]';
 
   if (loading) return <div className="text-sm text-[var(--color-ink)]/50">Loading…</div>;
   if (!form) {
@@ -55,13 +57,15 @@ export default function SafetyRulesPage() {
 
   return (
     <div className="max-w-lg">
-      <h1 className="text-xl font-semibold mb-1">Safety rules</h1>
-      <p className="text-sm text-[var(--color-ink)]/60 mb-6">
-        These deterministic thresholds decide when the AI can act automatically versus needing your
-        approval. The AI never overrides these.
-      </p>
+      <PageHeader
+        title="Safety rules"
+        description="These deterministic thresholds decide when the AI can act automatically versus needing your approval. The AI never overrides these."
+      />
 
-      <form onSubmit={handleSave} className="space-y-4">
+      <form
+        onSubmit={handleSave}
+        className="space-y-4 rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface)] p-5 shadow-[var(--shadow-card)]"
+      >
         <div>
           <label className="text-sm font-medium block mb-1">Approval threshold (₹)</label>
           <p className="text-xs text-[var(--color-ink)]/50 mb-1.5">
@@ -118,16 +122,12 @@ export default function SafetyRulesPage() {
             className={inputClass}
           />
         </div>
-        
+
         {error && <div className="text-sm text-[var(--color-danger)]">{error}</div>}
 
-        <button
-          type="submit"
-          disabled={saving}
-          className="text-sm bg-[var(--color-accent)] text-white px-4 py-2 rounded-md disabled:opacity-50 hover:opacity-90"
-        >
+        <Button type="submit" disabled={saving}>
           {saving ? 'Saving…' : 'Save rules'}
-        </button>
+        </Button>
       </form>
     </div>
   );

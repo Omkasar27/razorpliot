@@ -1,10 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Plus, Pencil, Power, Package } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../../lib/api.js';
 import ProductForm from '../../components/merchant/ProductForm.jsx';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../components/ui/dialog.jsx';
 import { Button } from '../../components/ui/button.jsx';
-import { Plus, Pencil, Power, Package } from 'lucide-react';
+import { PageHeader } from '../../components/ui/page-header.jsx';
+import { EmptyState } from '../../components/ui/empty-state.jsx';
 
 const MERCHANT_ID = import.meta.env.VITE_DEMO_MERCHANT_ID;
 
@@ -12,7 +14,7 @@ export default function CatalogPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [formMode, setFormMode] = useState(null); // null | 'create' | <product being edited>
+  const [formMode, setFormMode] = useState(null);
   const [busy, setBusy] = useState(false);
 
   const load = useCallback(async () => {
@@ -91,16 +93,16 @@ export default function CatalogPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-1">
-        <h1 className="text-xl font-semibold">Catalog</h1>
-        <Button size="sm" onClick={() => setFormMode('create')}>
-          <Plus size={14} />
-          Add product
-        </Button>
-      </div>
-      <p className="text-sm text-[var(--color-ink)]/60 mb-6">
-        Products available to the AI agent for search and recommendations.
-      </p>
+      <PageHeader
+        title="Catalog"
+        description="Products available to the AI agent for search and recommendations."
+        action={
+          <Button size="sm" onClick={() => setFormMode('create')}>
+            <Plus size={14} />
+            Add product
+          </Button>
+        }
+      />
 
       {error && <div className="text-sm text-[var(--color-danger)] mb-3">{error}</div>}
 
@@ -119,31 +121,42 @@ export default function CatalogPage() {
       </Dialog>
 
       {loading && <div className="text-sm text-[var(--color-ink)]/50">Loading…</div>}
+
       {!loading && products.length === 0 && (
-        <div className="text-sm text-[var(--color-ink)]/50">No products yet.</div>
+        <EmptyState
+          icon={Package}
+          title="No products yet"
+          description="Add your first product so the AI agent has something to search and recommend."
+          action={
+            <Button size="sm" variant="outline" onClick={() => setFormMode('create')}>
+              <Plus size={14} />
+              Add product
+            </Button>
+          }
+        />
       )}
 
       {!loading && products.length > 0 && (
-        <div className="border border-[var(--color-border)] rounded-lg overflow-hidden">
+        <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface)] shadow-[var(--shadow-card)] overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-[var(--color-surface-muted)] text-left text-xs text-[var(--color-ink)]/50">
               <tr>
-                <th className="px-4 py-2 font-medium"></th>
-                <th className="px-4 py-2 font-medium">Name</th>
-                <th className="px-4 py-2 font-medium">Category</th>
-                <th className="px-4 py-2 font-medium text-right">Price</th>
-                <th className="px-4 py-2 font-medium text-right">Inventory</th>
-                <th className="px-4 py-2 font-medium">Status</th>
-                <th className="px-4 py-2 font-medium"></th>
+                <th className="px-4 py-2.5 font-medium"></th>
+                <th className="px-4 py-2.5 font-medium">Name</th>
+                <th className="px-4 py-2.5 font-medium">Category</th>
+                <th className="px-4 py-2.5 font-medium text-right">Price</th>
+                <th className="px-4 py-2.5 font-medium text-right">Inventory</th>
+                <th className="px-4 py-2.5 font-medium">Status</th>
+                <th className="px-4 py-2.5 font-medium"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--color-border)] bg-[var(--color-surface)]">
+            <tbody className="divide-y divide-[var(--color-border)]/70">
               {products.map((p) => (
                 <tr
                   key={p._id}
-                  className={`hover:bg-[var(--color-surface-muted)]/60 ${!p.active ? 'opacity-50' : ''}`}
+                  className={`hover:bg-[var(--color-surface-muted)]/70 transition-colors ${!p.active ? 'opacity-50' : ''}`}
                 >
-                                    <td className="px-4 py-3">
+                  <td className="px-4 py-3">
                     <div className="w-9 h-9 rounded-md bg-[var(--color-surface-muted)] overflow-hidden flex items-center justify-center shrink-0">
                       {p.imageUrl ? (
                         <img src={p.imageUrl} alt="" className="w-full h-full object-cover" />

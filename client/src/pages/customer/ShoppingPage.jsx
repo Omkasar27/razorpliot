@@ -23,7 +23,7 @@ export default function ShoppingPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-6 grid grid-cols-1 md:grid-cols-2 gap-6 h-[calc(100vh-3.5rem)]">
-      <div className="border border-[var(--color-border)] rounded-lg bg-[var(--color-surface)] flex flex-col overflow-hidden">
+       <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface)] shadow-[var(--shadow-card)] flex flex-col overflow-hidden">
         <ChatPanel messages={messages} onSend={sendMessage} sending={sending} />
       </div>
 

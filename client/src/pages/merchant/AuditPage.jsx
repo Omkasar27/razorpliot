@@ -1,5 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
+import { ScrollText } from 'lucide-react';
 import { api } from '../../lib/api.js';
+import { PageHeader } from '../../components/ui/page-header.jsx';
+import { EmptyState } from '../../components/ui/empty-state.jsx';
+import { Button } from '../../components/ui/button.jsx';
 
 const MERCHANT_ID = import.meta.env.VITE_DEMO_MERCHANT_ID;
 
@@ -38,10 +42,10 @@ export default function AuditPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-1">Audit trail</h1>
-      <p className="text-sm text-[var(--color-ink)]/60 mb-4">
-        Every AI decision and system action, in order, with a plain-language reason.
-      </p>
+      <PageHeader
+        title="Audit trail"
+        description="Every AI decision and system action, in order, with a plain-language reason."
+      />
 
       <form
         onSubmit={(e) => {
@@ -54,14 +58,11 @@ export default function AuditPage() {
           value={orderIdFilter}
           onChange={(e) => setOrderIdFilter(e.target.value)}
           placeholder="Filter by order ID (optional)"
-          className="border border-[var(--color-border)] rounded-md px-3 py-2 text-sm outline-none focus:border-[var(--color-accent)] w-72"
+          className="border border-[var(--color-border)] rounded-md px-3 py-2 text-sm outline-none focus:border-[var(--color-accent)] w-72 bg-[var(--color-surface)]"
         />
-        <button
-          type="submit"
-          className="text-sm border border-[var(--color-border)] px-3 py-2 rounded-md hover:bg-[var(--color-surface-muted)]"
-        >
+        <Button type="submit" variant="outline" size="sm">
           Filter
-        </button>
+        </Button>
         {orderIdFilter && (
           <button
             type="button"
@@ -75,22 +76,30 @@ export default function AuditPage() {
 
       {loading && <div className="text-sm text-[var(--color-ink)]/50">Loading…</div>}
       {error && <div className="text-sm text-[var(--color-danger)]">{error}</div>}
-      {!loading && logs.length === 0 && <div className="text-sm text-[var(--color-ink)]/50">No activity yet.</div>}
+      {!loading && logs.length === 0 && (
+        <EmptyState
+          icon={ScrollText}
+          title="No activity yet"
+          description="Every AI decision and system action will appear here as soon as something happens."
+        />
+      )}
 
       {!loading && logs.length > 0 && (
-        <ol className="relative border-l border-[var(--color-border)] pl-4 space-y-4">
-          {logs.map((log) => (
-            <li key={log._id}>
-              <div className="absolute -left-[5px] mt-1.5 w-2 h-2 rounded-full bg-[var(--color-border)]" />
-              <div className="text-xs text-[var(--color-ink)]/40">
-                {new Date(log.ts).toLocaleString()}
-                <span className={`ml-2 font-medium ${ACTOR_STYLES[log.actor] || ''}`}>{log.actor}</span>
-                <span className="ml-2 text-[var(--color-ink)]/30">{log.action}</span>
-              </div>
-              <div className="text-sm mt-0.5">{log.reason}</div>
-            </li>
-          ))}
-        </ol>
+        <div className="rounded-xl border border-[var(--color-border)]/70 bg-[var(--color-surface)] shadow-[var(--shadow-card)] p-5">
+          <ol className="relative border-l border-[var(--color-border)] pl-4 space-y-4">
+            {logs.map((log) => (
+              <li key={log._id}>
+                <div className="absolute -left-[5px] mt-1.5 w-2 h-2 rounded-full bg-[var(--color-border)]" />
+                <div className="text-xs text-[var(--color-ink)]/40">
+                  {new Date(log.ts).toLocaleString()}
+                  <span className={`ml-2 font-medium ${ACTOR_STYLES[log.actor] || ''}`}>{log.actor}</span>
+                  <span className="ml-2 text-[var(--color-ink)]/30">{log.action}</span>
+                </div>
+                <div className="text-sm mt-0.5">{log.reason}</div>
+              </li>
+            ))}
+          </ol>
+        </div>
       )}
     </div>
   );
