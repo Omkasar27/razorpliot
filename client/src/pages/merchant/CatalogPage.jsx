@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Plus, Pencil, Power } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../../lib/api.js';
 import ProductForm from '../../components/merchant/ProductForm.jsx';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../components/ui/dialog.jsx';
 import { Button } from '../../components/ui/button.jsx';
+import { Plus, Pencil, Power, Package } from 'lucide-react';
 
 const MERCHANT_ID = import.meta.env.VITE_DEMO_MERCHANT_ID;
 
@@ -128,6 +128,7 @@ export default function CatalogPage() {
           <table className="w-full text-sm">
             <thead className="bg-[var(--color-surface-muted)] text-left text-xs text-[var(--color-ink)]/50">
               <tr>
+                <th className="px-4 py-2 font-medium"></th>
                 <th className="px-4 py-2 font-medium">Name</th>
                 <th className="px-4 py-2 font-medium">Category</th>
                 <th className="px-4 py-2 font-medium text-right">Price</th>
@@ -142,6 +143,15 @@ export default function CatalogPage() {
                   key={p._id}
                   className={`hover:bg-[var(--color-surface-muted)]/60 ${!p.active ? 'opacity-50' : ''}`}
                 >
+                                    <td className="px-4 py-3">
+                    <div className="w-9 h-9 rounded-md bg-[var(--color-surface-muted)] overflow-hidden flex items-center justify-center shrink-0">
+                      {p.imageUrl ? (
+                        <img src={p.imageUrl} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <Package size={14} className="text-[var(--color-ink)]/25" />
+                      )}
+                    </div>
+                  </td>
                   <td className="px-4 py-3 font-medium">{p.name}</td>
                   <td className="px-4 py-3 text-[var(--color-ink)]/70">{p.category}</td>
                   <td className="px-4 py-3 text-right tabular-nums">₹{p.price}</td>

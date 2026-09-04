@@ -3,6 +3,8 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
   signOut,
 } from 'firebase/auth';
 import { auth } from '../lib/firebaseClient.js';
@@ -16,7 +18,8 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   // Exchanges the current Firebase session for the app's own User record.
-  // `role` is only used on first login (server ignores it after that).
+  // `role` is only used on first login (server ignores it after that) —
+  // applies the same way whether the sign-in method was email/password or Google.
   const loadSession = useCallback(async (role) => {
     const { user } = await api.post('/auth/session', role ? { role } : {});
     setAppUser(user);
@@ -30,8 +33,8 @@ export function AuthProvider({ children }) {
         try {
           await loadSession();
         } catch {
-          // Expected for a brand-new Firebase account before signUp() has
-          // sent a role — appUser stays null until that completes.
+          // Expected for a brand-new account before a role has been sent —
+          // appUser stays null until signUp()/signInWithGoogle() completes.
           setAppUser(null);
         }
       } else {
@@ -49,10 +52,20 @@ export function AuthProvider({ children }) {
     await loadSession(role); // creates the app User (+ Merchant, if applicable) on first login
   };
 
+  // `role` only matters if this Google account has never signed in before —
+  // for a returning user the server ignores it and returns their existing record.
+  const signInWithGoogle = async (role) => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+    await loadSession(role);
+  };
+
   const signOutUser = () => signOut(auth);
 
   return (
-    <AuthContext.Provider value={{ firebaseUser, appUser, loading, signIn, signUp, signOutUser }}>
+    <AuthContext.Provider
+      value={{ firebaseUser, appUser, loading, signIn, signUp, signInWithGoogle, signOutUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

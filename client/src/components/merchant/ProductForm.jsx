@@ -99,6 +99,16 @@ export default function ProductForm({ initial, onSubmit, onCancel, busy }) {
         />
       </div>
 
+      <div>
+        <label className="text-xs text-[var(--color-ink)]/60 mb-1 block">Image URL</label>
+        <input
+          value={form.imageUrl}
+          onChange={(e) => update('imageUrl', e.target.value)}
+          className={inputClass}
+          placeholder="https://…"
+        />
+      </div>
+
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="text-xs text-[var(--color-ink)]/60 mb-1 block">Shipping info</label>

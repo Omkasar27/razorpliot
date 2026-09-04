@@ -4,6 +4,7 @@
 export const productSeeds = [
   {
     key: 'gaming-mouse',
+    imageUrl: `https://picsum.photos/seed/gaming-mouse/400/300`,
     name: 'Nova X Gaming Mouse',
     description: 'Lightweight wired gaming mouse with 12,000 DPI optical sensor and RGB lighting.',
     category: 'Peripherals',
@@ -16,6 +17,7 @@ export const productSeeds = [
   },
   {
     key: 'mouse-pad',
+    imageUrl: `https://picsum.photos/seed/gaming-mouse/400/300`,
     name: 'GlideZone Extended Mouse Pad',
     description: 'Extended cloth mouse pad, 900x400mm, stitched edges for durability.',
     category: 'Peripherals',
@@ -28,7 +30,9 @@ export const productSeeds = [
   },
   {
     key: 'mouse-grip-tape',
+    imageUrl: `https://picsum.photos/seed/gaming-mouse/400/300`,
     name: 'ProGrip Mouse Grip Tape',
+    
     description: 'Anti-slip grip tape kit, precut for most gaming mice.',
     category: 'Peripherals',
     price: 299,
@@ -40,6 +44,7 @@ export const productSeeds = [
   },
   {
     key: 'running-shoe',
+    imageUrl: `https://picsum.photos/seed/gaming-mouse/400/300`,
     name: 'AeroStride Running Shoes',
     description: 'Breathable mesh running shoes built for daily jogging, cushioned sole.',
     category: 'Footwear',
@@ -52,6 +57,7 @@ export const productSeeds = [
   },
   {
     key: 'running-socks',
+    imageUrl: `https://picsum.photos/seed/gaming-mouse/400/300`,
     name: 'TrailFlex Running Socks (Pack of 3)',
     description: 'Moisture-wicking cushioned running socks, arch support.',
     category: 'Footwear',
@@ -64,6 +70,7 @@ export const productSeeds = [
   },
   {
     key: 'insoles',
+    imageUrl: `https://picsum.photos/seed/gaming-mouse/400/300`,
     name: 'ComfortStep Cushioned Insoles',
     description: 'Gel cushioned insoles for extra shock absorption during long runs.',
     category: 'Footwear',
@@ -76,6 +83,7 @@ export const productSeeds = [
   },
   {
     key: 'laptop-bag',
+    imageUrl: `https://picsum.photos/seed/gaming-mouse/400/300`,
     name: 'UrbanCarry 15" Laptop Bag',
     description: 'Water-resistant laptop backpack with padded compartment, fits up to 15.6".',
     category: 'Bags',
@@ -88,6 +96,7 @@ export const productSeeds = [
   },
   {
     key: 'laptop-sleeve',
+    imageUrl: `https://picsum.photos/seed/gaming-mouse/400/300`,
     name: 'SoftShell Laptop Sleeve 15"',
     description: 'Neoprene protective sleeve, fits inside most laptop bags.',
     category: 'Bags',
@@ -100,6 +109,7 @@ export const productSeeds = [
   },
   {
     key: 'mechanical-keyboard',
+    imageUrl: `https://picsum.photos/seed/gaming-mouse/400/300`,
     name: 'KeyForge TKL Mechanical Keyboard',
     description: 'Tenkeyless mechanical keyboard with hot-swappable switches.',
     category: 'Peripherals',
@@ -112,6 +122,7 @@ export const productSeeds = [
   },
   {
     key: 'wrist-rest',
+    imageUrl: `https://picsum.photos/seed/gaming-mouse/400/300`,
     name: 'RestEase Keyboard Wrist Rest',
     description: 'Memory foam wrist rest for extended typing sessions.',
     category: 'Peripherals',
